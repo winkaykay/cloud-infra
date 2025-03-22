@@ -17,7 +17,7 @@ resource "aws_instance" "k8s_master_instance" {
   subnet_id                   = aws_subnet.k8s_private_subnet.id
   instance_type               = var.instance_type
   key_name                    = var.ami_key_pair_name
-  associate_public_ip_address = true
+  associate_public_ip_address = false
   security_groups             = [aws_security_group.k8s_sg.id]
   iam_instance_profile        = aws_iam_instance_profile.control_plane_profile.name
   root_block_device {
@@ -35,7 +35,8 @@ resource "aws_instance" "k8s_master_instance" {
 
     aws_iam_instance_profile.control_plane_profile,
     aws_s3_bucket.k8s_join_bucket,
-    random_string.s3name
+    random_string.s3name,
+    aws_nat_gateway.nat
   ]
 }
 
